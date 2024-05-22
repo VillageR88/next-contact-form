@@ -121,7 +121,7 @@ export default function Home() {
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center p-6 font-karla sm:min-h-screen">
       <div
-        className={`${showMessage ? '' : '-translate-y-44'} fixed inset-0 flex size-full justify-center px-[24px] transition-transform duration-500`}
+        className={`${showMessage ? '' : '-translate-y-44'} fixed inset-0 flex h-fit justify-center px-[24px] transition-transform duration-500`}
       >
         <div className="mt-[24px] flex size-full h-fit min-h-[107px] max-w-[450px] flex-col gap-[8px] rounded-[12px] bg-[#2A4144] p-[24px]">
           <div className="flex items-center gap-[8px]">
