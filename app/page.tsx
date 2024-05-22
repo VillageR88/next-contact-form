@@ -13,7 +13,19 @@ enum BoxType {
 
 export default function Home() {
   const [undefined, action] = useFormState<'', FormData>(CreateInvoiceContactForm, '');
-
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [pendingInProcess, setPendingInProcess] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
+  useEffect(() => {
+    if (!pending && pendingInProcess) {
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+        setPendingInProcess(false);
+        setPending(false);
+      }, 7000);
+    }
+  }, [pending, pendingInProcess, setPending]);
   const Box = ({
     boxType,
     id,
@@ -85,55 +97,47 @@ export default function Home() {
   };
 
   const SubmitButton = () => {
-    const [showMessage, setShowMessage] = useState<boolean>(false);
-    const [pendingInProcess, setPendingInProcess] = useState<boolean>(false);
     const { pending } = useFormStatus();
+
     useEffect(() => {
       if (pending) setPendingInProcess(true);
     }, [pending]);
     useEffect(() => {
-      if (pendingInProcess && !pending) {
-        setPendingInProcess(false);
-        setShowMessage(true);
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 10000);
-      }
-    }, [pending, pendingInProcess]);
+      if (pending) setPending(true);
+      else setPending(false);
+    }, [pending]);
 
     return (
-      <>
-        <div
-          className={`${showMessage ? '' : '-translate-y-36'} absolute inset-0 flex size-full h-[107px] justify-center transition-all`}
-        >
-          <div className="mt-[24px] flex size-full max-w-[450px] flex-col gap-[8px] rounded-[12px] bg-[#2A4144] p-[24px]">
-            <div className="flex gap-[8px]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" fill="none" viewBox="0 0 20 21">
-                <path
-                  fill="#fff"
-                  d="M14.28 7.72a.748.748 0 0 1 0 1.06l-5.25 5.25a.748.748 0 0 1-1.06 0l-2.25-2.25a.75.75 0 1 1 1.06-1.06l1.72 1.72 4.72-4.72a.75.75 0 0 1 1.06 0Zm5.47 2.78A9.75 9.75 0 1 1 10 .75a9.76 9.76 0 0 1 9.75 9.75Zm-1.5 0A8.25 8.25 0 1 0 10 18.75a8.26 8.26 0 0 0 8.25-8.25Z"
-                />
-              </svg>
-              <span className="text-[18px] font-bold leading-[150%] text-[#FFFFFF]">Message Sent!</span>
-            </div>
-            <span className="text-[16px] leading-[150%] text-[#E0F1E8]">
-              Thanks for completing the form. We’ll be in touch soon!
-            </span>
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="flex h-[59px] w-full items-center justify-center gap-4 rounded-[8px] bg-[#0C7D69] text-[18px] font-bold leading-[150%] text-[#FFFFFF] transition-colors hover:bg-[#2A4144]"
-        >
-          <span>{pending ? 'Submitting' : 'Submit'}</span>
-          <Loader pending={pending} />
-        </button>
-      </>
+      <button
+        type="submit"
+        className="flex h-[59px] w-full items-center justify-center gap-4 rounded-[8px] bg-[#0C7D69] text-[18px] font-bold leading-[150%] text-[#FFFFFF] transition-colors hover:bg-[#2A4144]"
+      >
+        <span>{pending ? 'Submitting' : 'Submit'}</span>
+        <Loader pending={pending} />
+      </button>
     );
   };
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center p-6 font-karla sm:min-h-screen">
+      <div
+        className={`${showMessage ? '' : '-translate-y-36'} fixed inset-0 flex size-full justify-center px-[24px] transition-transform duration-500`}
+      >
+        <div className="mt-[24px] flex size-full h-fit min-h-[107px] max-w-[450px] flex-col gap-[8px] rounded-[12px] bg-[#2A4144] p-[24px]">
+          <div className="flex items-center gap-[8px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" fill="none" viewBox="0 0 20 21">
+              <path
+                fill="#fff"
+                d="M14.28 7.72a.748.748 0 0 1 0 1.06l-5.25 5.25a.748.748 0 0 1-1.06 0l-2.25-2.25a.75.75 0 1 1 1.06-1.06l1.72 1.72 4.72-4.72a.75.75 0 0 1 1.06 0Zm5.47 2.78A9.75 9.75 0 1 1 10 .75a9.76 9.76 0 0 1 9.75 9.75Zm-1.5 0A8.25 8.25 0 1 0 10 18.75a8.26 8.26 0 0 0 8.25-8.25Z"
+              />
+            </svg>
+            <span className="text-[18px] font-bold leading-[150%] text-[#FFFFFF]">Message Sent!</span>
+          </div>
+          <span className="text-[16px] leading-[150%] text-[#E0F1E8]">
+            Thanks for completing the form. We’ll be in touch soon!
+          </span>
+        </div>
+      </div>
       <form
         action={action}
         id="contact-form"
