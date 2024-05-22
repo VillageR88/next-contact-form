@@ -2,22 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-}
-
-.themeHover .regularInput {
-  @apply transition;
-}
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -33,40 +17,66 @@ input:-webkit-autofill:active {
 :is(.dark) input:-webkit-autofill {
   -webkit-text-fill-color: white;
 }
-.custom-list li {
-  list-style-type: none;
-  position: relative;
+
+h1 {
+  @apply text-[32px] font-bold tracking-[-1px];
+}
+label {
+  @apply text-[16px] leading-[150%];
 }
 
-.custom-list li::before {
-  content: '•';
-  scale: 1;
+input,
+textarea,
+.labelSpan {
+  @apply text-[18px] leading-[150%];
+}
+
+input[type='radio'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  background-clip: content-box;
+  border: 2px solid #86a2a5;
+  border-radius: 50%;
+}
+
+input[type='radio']:checked {
+  background-color: #0c7d69;
+  border: 2px solid #0c7d69;
+}
+
+input[type='checkbox'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  padding: 4px;
+  background-clip: content-box;
+  border: 2px solid #86a2a5;
+  border-radius: 2px;
+}
+
+input[type='checkbox']:checked {
   position: absolute;
-  left: -1.9em;
+  border-color: #0c7d69;
 }
 
-.orangeLi li::before {
-  color: #e46643;
+.checkboxWrapper:has(input[type='checkbox']) .checkboxImage {
+  @apply hidden;
+}
+.checkboxWrapper:has(input[type='checkbox']:checked) .checkboxImage {
+  @apply block;
 }
 
-.custom-listNumber li {
-  font-weight: 700;
-  left: 2.52em;
-  position: relative;
-  counter-increment: listNumber;
+.groupParent:has(input:checked:not(:hover)) {
+  @apply bg-[#E0F1E8] text-[#0C7D69] outline-[#0C7D69];
 }
-
-.custom-listNumber li::before {
-  content: counter(listNumber) '.';
-  position: absolute;
-  left: -2em;
-}
-
-pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.group1Parent:hover .group1Child {
-  @apply underline;
+.groupParent:has(input:hover) {
+  @apply text-[#0C7D69] outline-[#0C7D69];
 }

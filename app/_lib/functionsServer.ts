@@ -1,10 +1,37 @@
 'use server';
 
-import type { tGithubJSON1, tGithubJSON2 } from './types';
+import nodemailer from 'nodemailer';
 
-export const createInvoice = async (prev: tGithubJSON1, formData: FormData): Promise<tGithubJSON1> => {
-  const response = await fetch('https://api.github.com/users/'.concat(formData.get('search') as string));
-  const json = (await response.json()) as tGithubJSON1 | tGithubJSON2;
-  if ('message' in json && json.message === 'Not Found') return { ...prev, error: true };
-  else return { ...(json as tGithubJSON1), error: false };
-};
+export async function CreateInvoiceContactForm(prev: '', formData: FormData): Promise<''> {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+  const email = formData.get('email') as string;
+  const firstName = formData.get('firstName') as string;
+  const lastName = formData.get('lastName') as string;
+  const name = `${firstName} ${lastName}`;
+  const message = formData.get('message') as string;
+  if (!process.env.EMAIL) return '';
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: 'Contact Form',
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+  };
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) {
+        console.error('there was an error: ', err);
+        reject(err);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+  return '';
+}

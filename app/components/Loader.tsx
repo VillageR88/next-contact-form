@@ -1,11 +1,7 @@
 'use client';
-
-import { useContext } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
-import { DataContext } from '@/app/_providers/DataContext';
 
-export default function Loader() {
-  const { pending } = useContext(DataContext);
+export default function Loader({ pending }: { pending: boolean }) {
   if (!pending) return null;
   return (
     <RotatingLines
@@ -14,7 +10,7 @@ export default function Loader() {
       strokeWidth="5"
       animationDuration="0.75"
       ariaLabel="rotating-lines-loading"
-      strokeColor="#0079FF"
+      strokeColor="#FFFFFF"
     />
   );
 }

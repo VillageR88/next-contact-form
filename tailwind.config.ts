@@ -8,8 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        tablet: '700px',
+      },
       fontFamily: {
-        spaceMono: ['var(--font-space-mono)'],
+        karla: ['var(--font-karla)'],
       },
       colors: {
         gray1: '#121212',
