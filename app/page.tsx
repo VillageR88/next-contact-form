@@ -12,20 +12,19 @@ enum BoxType {
 }
 
 export default function Home() {
-  const [undefined, action] = useFormState<'', FormData>(CreateInvoiceContactForm, '');
+  const [state, action] = useFormState<number, FormData>(CreateInvoiceContactForm, 0);
   const [showMessage, setShowMessage] = useState<boolean>(false);
-  const [pendingInProcess, setPendingInProcess] = useState<boolean>(false);
-  const [pending, setPending] = useState<boolean>(false);
+  const [currentNumber, setCurrentNumber] = useState<number>(0);
   useEffect(() => {
-    if (!pending && pendingInProcess) {
+    if (state !== currentNumber) {
+      setCurrentNumber(state);
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
-        setPendingInProcess(false);
-        setPending(false);
       }, 7000);
     }
-  }, [pending, pendingInProcess, setPending]);
+  }, [state, currentNumber]);
+
   const Box = ({
     boxType,
     id,
@@ -99,16 +98,9 @@ export default function Home() {
   const SubmitButton = () => {
     const { pending } = useFormStatus();
 
-    useEffect(() => {
-      if (pending) setPendingInProcess(true);
-    }, [pending]);
-    useEffect(() => {
-      if (pending) setPending(true);
-      else setPending(false);
-    }, [pending]);
-
     return (
       <button
+        disabled={pending}
         type="submit"
         className="flex h-[59px] w-full items-center justify-center gap-4 rounded-[8px] bg-[#0C7D69] text-[18px] font-bold leading-[150%] text-[#FFFFFF] transition-colors hover:bg-[#2A4144]"
       >
